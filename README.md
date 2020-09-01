@@ -35,4 +35,17 @@ File Structure:
 8. README.md - File that contains all of the information about the app (This file).
 
 
+Installing Libraries:
+1. Mac Installations:
+pip3 install Flask
+pip3 install flask_sqlalchemy
+pip3 install flask_bootstrap
+pip3 install flask_wtf
+pip3 install wtforms
 
+2. Windows Installations:
+pip install Flask
+pip install flask_sqlalchemy
+pip install flask_bootstrap
+pip install flas_wtf
+pip install wtforms
