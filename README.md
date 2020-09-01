@@ -36,16 +36,16 @@ File Structure:
 
 
 Installing Libraries:
-1. Mac Installations:
-pip3 install Flask
-pip3 install flask_sqlalchemy
-pip3 install flask_bootstrap
-pip3 install flask_wtf
-pip3 install wtforms
+Mac Installations:
+1. pip3 install Flask
+2. pip3 install flask_sqlalchemy
+3. pip3 install flask_bootstrap
+4. pip3 install flask_wtf
+5. pip3 install wtforms
 
-2. Windows Installations:
-pip install Flask
-pip install flask_sqlalchemy
-pip install flask_bootstrap
-pip install flas_wtf
-pip install wtforms
+Windows Installations:
+1. pip install Flask
+2. pip install flask_sqlalchemy
+3. pip install flask_bootstrap
+4. pip install flas_wtf
+5. pip install wtforms
