@@ -35,7 +35,6 @@ File Structure:
 8. README.md - File that contains all of the information about the app (This file).
 
 
-Installing Libraries:
 Mac Installations:
 1. pip3 install Flask
 2. pip3 install flask_sqlalchemy
