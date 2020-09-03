@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+{% if current_user.is_authenticated %}
 <div class="header">
-        <h1>Hello, welcome to TodoListApp!</h1>
+    <h1>Hello {{current_user.username}}, you can create a new todo from the navigation menu :)</h1>
 </div>
+{% else %}
+<div class='header'>
+    <h1>Hello, welcome to the todo list app! To create a todo, sign up first.</h1>
+</div>
+{% endif %}
+
 <style>
     .header{
         margin-top: 100px;

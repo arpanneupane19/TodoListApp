@@ -29,10 +29,18 @@
 
             </div>
             <!-- Navbar Right Side -->
-            <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="/newtodo">New Todo</a>
-                <a class="nav-item nav-link active" href="/mytodos">My Todo's</a>
+            {% if current_user.is_authenticated %}
+              <div class="navbar-nav">
+                  <a class="nav-item nav-link active" href="/newtodo">New Todo</a>
+                  <a class="nav-item nav-link active" href="/mytodos">My Todo's</a>
+                  <a class='nav-item nav-link active' href='/logout'>Logout</a>
+              </div>
+            {% else %}
+              <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="/signup">Sign Up</a>
+                <a class="nav-item nav-link active" href="/login">Login</a>
             </div>
+            {% endif %}
           </div>
         </div>
       </nav>

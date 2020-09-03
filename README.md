@@ -1,6 +1,6 @@
 This is a Todo list app where you can create todo's.
-You can delete them if you don't want to do them, and mark 
-them as completed once they have been completed.
+You can sign up and then make todo's. You have the option
+to delete them and to complete them once they have been completed.
 
 
 Made in:
@@ -14,6 +14,9 @@ Libraries:
 4. flask_bootstrap
 5. wtforms
 6. wtforms.validators
+7. flask_login
+8. flask_bcrypt
+
 
 
 Database:
@@ -41,6 +44,8 @@ Mac Installations:
 3. pip3 install flask_bootstrap
 4. pip3 install flask_wtf
 5. pip3 install wtforms
+6. pip3 install flask_login
+7. pip3 install flask_bcrypt
 
 Windows Installations:
 1. pip install Flask
@@ -48,3 +53,5 @@ Windows Installations:
 3. pip install flask_bootstrap
 4. pip install flas_wtf
 5. pip install wtforms
+6. pip install flask_login
+7. pip install flask_bcrypt
