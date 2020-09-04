@@ -13,6 +13,9 @@ from flask_mail import Mail, Message
 import os
 from datetime import datetime
 from flask_bcrypt import Bcrypt
+import datetime
+import time
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 app = Flask(__name__)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -20,6 +23,13 @@ bcrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = 'jfale!@#gys^&*(@jafd00193n'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 bootstrap = Bootstrap(app)
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = os.environ.get("EMAIL")
+app.config['MAIL_PASSWORD'] = os.environ.get("EMAIL_PASSWORD")
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -35,6 +45,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo = db.Column(db.String(130), nullable=False)
     complete = db.Column(db.Boolean)
+    todo_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
@@ -45,6 +56,18 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80))
     todo = db.relationship('Todo', backref='writer', lazy=True)
 
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 
 class RegisterForm(FlaskForm):
     email = StringField("Email", validators=[InputRequired(), Email(message="Invalid Email"), Length(max=50)])
@@ -72,6 +95,15 @@ class NewTodoForm(FlaskForm):
     todo = TextAreaField("Enter Todo", validators=[InputRequired(), Length(min=4, max=130)])
     submit = SubmitField("Create Todo")
 
+class ForgotPasswordForm(FlaskForm):
+    email = StringField("Email", validators=[InputRequired(), Email(message="Invalid Email"), Length(max=50)])
+    submit = SubmitField('Submit')
+
+class ResetPasswordForm(FlaskForm):
+    email = StringField("Email", validators=[InputRequired(), Email(message="Invalid Email"), Length(max=50)])
+    # username = StringField("Username", validators=[InputRequired(), Length(min=4, max=15)])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=4, max=15)])
+    submit = SubmitField('Reset Password')
 
 @app.route('/home')
 @app.route('/')
@@ -111,6 +143,52 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+# Reset email
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Forgot your password?',
+                  sender='noreply@demo.com',
+                  recipients=[user.email])
+    msg.body = f'''To reset your password, visit the following link:
+    {url_for('reset_password', token=token, _external=True)}
+If you did not make this request then simply ignore this email.
+'''
+    mail.send(msg)
+
+# If a user forgets their password
+@app.route("/forgotpassword", methods=["GET", "POST"])
+def forgot_password():
+    form = ForgotPasswordForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('userhome'))
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash("An email has been sent to reset your password.", 'success')
+
+
+    return render_template("forgotpw.html", form=form, title="Forgot Password")
+
+# Reset the Password
+@app.route("/resetpassword/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('userhome'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('forgot_password'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        user.password = hashed_password
+        db.session.commit()
+        flash('Your password has been updated! You are now able to log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('resetpw.html', title='Reset Password', form=form)
+
 
 
 # Show the todos made by the user.
@@ -157,4 +235,4 @@ def delete_todo(todo_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True) 
+    app.run() 
