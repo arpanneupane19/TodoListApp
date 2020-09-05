@@ -75,7 +75,7 @@ class User(db.Model, UserMixin):
 class RegisterForm(FlaskForm):
     email = StringField("Email", validators=[InputRequired(), Email(message="Invalid Email"), Length(max=50)],render_kw={"placeholder": "example@gmail.com"})
     username = StringField("Username", validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField("Password", validators=[InputRequired(), Length(min=4, max=50)], render_kw={"placeholder": "********"})
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=4, max=15)], render_kw={"placeholder": "********"})
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
@@ -90,7 +90,7 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField("Password", validators=[InputRequired(), Length(min=4, max=50)])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=4, max=15)])
     submit = SubmitField('Login')
 
 
