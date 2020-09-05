@@ -48,7 +48,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo = db.Column(db.String(130), nullable=False)
     complete = db.Column(db.Boolean)
-    todo_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
+    todo_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
