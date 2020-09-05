@@ -202,7 +202,7 @@ def reset_password(token):
 def show_todos():
     incomplete = Todo.query.filter_by(writer=current_user, complete=False).all()
     complete = Todo.query.filter_by(writer=current_user, complete=True).all()
-    return render_template('mytodos.html', incomplete=incomplete, complete=complete)
+    return render_template('mytodos.html', incomplete=incomplete, complete=complete, title='My Todos')
 
 
 @login_required
