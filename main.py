@@ -123,6 +123,8 @@ def signup():
         new_user = User(email=form.email.data, username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
+        flash(f'Account created for {form.username.data}', 'success')
+        return redirect(url_for('login'))
 
     return render_template('signup.html', form=form, title='Sign Up')
 
