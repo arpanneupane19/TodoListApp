@@ -21,7 +21,7 @@
         {% for todo in incomplete %}
             <div class="border">
                 <p>{{todo.todo}}</p>
-                <p>Todo created on {{todo.todo_time.strftime("%m/%d/%y")}} at {{todo.todo_time.strftime('%I:%M %p')}}</p>
+                <p>Todo created on {{todo.todo_time.strftime("%m/%d/%y")}} at {{todo.todo_time.strftime('%I:%M %p')}} UTC</p>
                 <a class="btn btn-dark" href="{{ url_for('complete_todo', todo_id=todo.id)}}">Mark Complete</a>
                 <a class="btn btn-danger" href="{{ url_for('delete_todo', todo_id=todo.id)}}">Delete</a>
             </div><br>

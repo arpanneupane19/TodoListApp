@@ -48,7 +48,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo = db.Column(db.String(130), nullable=False)
     complete = db.Column(db.Boolean)
-    todo_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+    todo_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
@@ -202,7 +202,7 @@ def reset_password(token):
 def show_todos():
     incomplete = Todo.query.filter_by(writer=current_user, complete=False).all()
     complete = Todo.query.filter_by(writer=current_user, complete=True).all()
-    return render_template('mytodos.html', incomplete=incomplete, complete=complete, title='My Todos')
+    return render_template('mytodos.html', incomplete=incomplete, complete=complete)
 
 
 @login_required
