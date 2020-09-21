@@ -108,6 +108,18 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired(), Length(min=4, max=15)])
     submit = SubmitField('Reset Password')
 
+# Error handling
+@app.errorhandler(404)
+def page_not_found(e):
+    return "<h1>404 Page Not Found</h1>", 404
+
+
+@app.errorhandler(403)
+def page_not_found(e):
+    return "<h1>403 You do not have permission to do that.</h1>", 403
+
+
+
 @app.route('/home')
 @app.route('/')
 def home():
@@ -206,7 +218,7 @@ def show_todos():
 
 
 @login_required
-@app.route("/newtodo", methods=['GET','POST'])
+@app.route("/newtodo", methods=['GET', 'POST'])
 def create_todo():
     form = NewTodoForm()
     if form.validate_on_submit():
@@ -240,4 +252,4 @@ def delete_todo(todo_id):
 
 
 if __name__ == "__main__":
-    app.run() 
+    app.run(debug=True) 
