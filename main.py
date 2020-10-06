@@ -209,16 +209,17 @@ def reset_password(token):
 
 
 # Show the todos made by the user.
-@login_required
 @app.route('/mytodos')
+@login_required
 def show_todos():
     incomplete = Todo.query.filter_by(writer=current_user, complete=False).all()
     complete = Todo.query.filter_by(writer=current_user, complete=True).all()
     return render_template('mytodos.html', incomplete=incomplete, complete=complete, title='My Todos')
 
 
-@login_required
+
 @app.route("/newtodo", methods=['GET', 'POST'])
+@login_required
 def create_todo():
     form = NewTodoForm()
     if form.validate_on_submit():
@@ -230,8 +231,8 @@ def create_todo():
     return render_template('newtodo.html', title='New Todo', form=form)
 
 
-@login_required
 @app.route('/complete/<todo_id>', methods=['GET', 'POST'])
+@login_required
 def complete_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     todo.complete = True
@@ -240,8 +241,8 @@ def complete_todo(todo_id):
     return redirect(url_for('show_todos'))
 
 
-@login_required
 @app.route('/delete/<todo_id>', methods=['GET', 'POST'])
+@login_required
 def delete_todo(todo_id):
     todo = Todo.query.get_or_404(todo_id)
     db.session.delete(todo)
